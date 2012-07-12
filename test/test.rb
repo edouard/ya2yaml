@@ -492,5 +492,14 @@ class TC_Ya2YAML < Test::Unit::TestCase
       "Ya2YAML#string_type should dump strings with invalid encodings as '!binary'"
     )
   end
+  
+  def test_always_emit_quoted_strings_option
+    test = {
+      "key1" => "value",
+      "key2" => "a long value"
+    }
+    assert_equal("--- \nkey1: value\nkey2: \"a long value\"\n", test.ya2yaml, 'key1 value should not be surrounded by quotes')
+    assert_equal("--- \nkey1: \"value\"\nkey2: \"a long value\"\n", test.ya2yaml({:always_emit_quoted_strings => true}), 'both values should be surrounded by quotes')
+  end
 
 end

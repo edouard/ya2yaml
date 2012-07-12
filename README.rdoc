@@ -101,7 +101,7 @@ A String which contains any non-UTF8 character will be regarded as "binary" and 
 
 - :preserve_order
   - default: false
-  - When set to true, the order of keys in hashes will be the natural hash order rather than sorted alphabetically or explicitelly (usefull for syck/psych roundtrip and ruby >= 1.9.2)
+  - When set to true, the order of keys in hashes will be the natural hash order rather than sorted alphabetically or explicitelly (useful for syck/psych roundtrip and ruby >= 1.9.2)
 
 - :syck_compatible
   - default: false
@@ -109,6 +109,11 @@ A String which contains any non-UTF8 character will be regarded as "binary" and 
     - :printable_with_syck
     - :escape_b_specific
     - :escape_as_utf8
+    
+- :always_emit_quoted_strings
+  - default: false
+  - When set to true, Ya2YAML will emit string hash values surrounded by quotes. Useful to keep linguistic YAML files consistent.
+
 
 == More information
 

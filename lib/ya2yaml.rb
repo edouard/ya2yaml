@@ -30,7 +30,7 @@ class Ya2YAML
 
   private
 
-  def emit(obj, level)
+  def emit(obj, level, is_key=false)
     case obj
       when Array
         if (obj.length == 0)
@@ -60,7 +60,7 @@ class Ya2YAML
             hash_keys = obj.keys.sort {|x, y| x.to_s <=> y.to_s }
           end
           hash_keys.collect {|k|
-            key = emit(k, level + 1)
+            key = emit(k, level + 1, true)
             if (
               is_one_plain_line?(key) ||
               key =~ /\A(#{REX_BOOL}|#{REX_FLOAT}|#{REX_INT}|#{REX_NULL})\z/x
@@ -75,7 +75,7 @@ class Ya2YAML
       when NilClass
         '~'
       when String
-        emit_string(obj, level)
+        emit_string(obj, level, is_key)
       when TrueClass, FalseClass
         obj.to_s
       when Fixnum, Bignum, Float
@@ -116,12 +116,12 @@ class Ya2YAML
     end
   end
 
-  def emit_string(str, level)
+  def emit_string(str, level, is_key=false)
     (is_string, is_printable, is_one_line, is_one_plain_line) = string_type(str)
     if is_string
       if is_printable
         if is_one_plain_line
-          emit_simple_string(str, level)
+          @options[:always_emit_quoted_strings] && !is_key ? emit_quoted_string(str, level) : emit_simple_string(str, level)
         else
           (is_one_line || str.length < @options[:minimum_block_length]) ?
             emit_quoted_string(str, level) :
